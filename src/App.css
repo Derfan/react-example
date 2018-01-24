@@ -24,14 +24,17 @@
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.todo-container {
-  padding: 12px 0;
+.input-wrapper {
+  display: flex;
 }
-
 
 .todo {
   padding: 6px 0;
