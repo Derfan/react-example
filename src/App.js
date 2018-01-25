@@ -32,7 +32,12 @@ class App extends Component {
             onChange={this.handleChange}
             value={value}
           />
-          <button onClick={this.handleClick}>Создать новость</button>
+          <button
+            className={!value ? "todo-button disabled" : "todo-button"}
+            onClick={this.handleClick}
+          >
+            Создать новость
+          </button>
         </div>
       </Fragment>
     );
