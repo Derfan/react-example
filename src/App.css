@@ -52,7 +52,8 @@
 
 .todo-button {
   width: 15%;
-  background-color: red;
+  color: #fff;
+  background-color: #000;
 }
 
 .disabled {
