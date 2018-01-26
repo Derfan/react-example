@@ -4,37 +4,38 @@ import("./App.css");
 
 class App extends Component {
   state = {
-    value: "",
+    newsInput: "",
     news: []
   };
-  handleChange = e => {
-    this.setState({ value: e.target.value });
-  };
-  handleClick = e => {
+
+  handleChange = e => this.setState({ newsInput: e.target.value });
+
+  handleNewPost = e => {
     e.preventDefault();
 
-    let { value, news } = this.state;
+    let { newsInput, news } = this.state;
 
-    news.push(value);
-    this.setState({ news });
-    this.setState({ value: "" });
+    this.setState({ news: [...news, newsInput], newsInput: "" });
   };
+
   render() {
-    let { value, news } = this.state;
+    let { newsInput, news } = this.state;
+    const isNews = !news || !news.length;
+
     return (
       <Fragment>
-        <NewsPost news={news} />
+        {isNews ? <p>Новостей пока нет...</p> : <NewsPost news={news} />}
         <div className="input-wrapper">
           <input
             className="todo-input"
             type="text"
             placeholder="Какие новости?"
             onChange={this.handleChange}
-            value={value}
+            value={newsInput}
           />
           <button
-            className={!value ? "todo-button disabled" : "todo-button"}
-            onClick={this.handleClick}
+            className={!newsInput ? "todo-button disabled" : "todo-button"}
+            onClick={this.handleNewPost}
           >
             Создать новость
           </button>
