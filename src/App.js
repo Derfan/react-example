@@ -82,14 +82,15 @@ export default class App extends Component {
     }
   };
 
+  titles = ["Personal information", "Card information", "Finish"];
+
   render() {
     const { step } = this.state;
-    const titles = ["Personal information", "Card information", "Finish"];
 
     return (
       <div className="container">
         <div className="tab-panel">
-          {titles.map((elem, i) => {
+          {this.titles.map((elem, i) => {
             return (
               <Step
                 key={elem}

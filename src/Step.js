@@ -1,32 +1,26 @@
 import React, { Component } from "react";
+import classNames from "classnames";
 import "./Step.css";
 
 export default class Step extends Component {
-  getClassList() {
-    const { isClickable, isSelected } = this.props;
-    let classList = "step";
-
-    if (isClickable) {
-      classList += " step-clickable";
-    }
-    if (isSelected) {
-      classList += " step-selected";
-    }
-
-    return classList;
-  }
-
   handleClick = () => {
     const { isClickable, onClick, number } = this.props;
 
-    return isClickable ? onClick(number) : null;
+    isClickable && onClick(number);
   };
 
   render() {
-    const { number, children } = this.props;
+    const { number, children, isClickable, isSelected } = this.props;
 
     return (
-      <div onClick={this.handleClick} className={this.getClassList()}>
+      <div
+        onClick={this.handleClick}
+        className={classNames(
+          "step",
+          { "step-clickable": isClickable },
+          { "step-selected": isSelected }
+        )}
+      >
         <p className="step__number">{number}</p>
         <p className="step__title">{children}</p>
       </div>
