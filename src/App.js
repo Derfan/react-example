@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import NewsPost from "./NewsPost";
 import("./App.css");
 
@@ -19,12 +19,12 @@ class App extends Component {
   };
 
   render() {
-    let { newsInput, news } = this.state;
+    const { newsInput, news } = this.state;
+    const isDisabled = newsInput !== "";
     const isNews = !news || !news.length;
 
     return (
-      <Fragment>
-        {isNews ? <p>Новостей пока нет...</p> : <NewsPost news={news} />}
+      <div className="App">
         <div className="input-wrapper">
           <input
             className="todo-input"
@@ -34,13 +34,18 @@ class App extends Component {
             value={newsInput}
           />
           <button
-            className={!newsInput ? "todo-button disabled" : "todo-button"}
+            className="todo-button"
             onClick={this.handleNewPost}
+            disabled={!isDisabled}
           >
             Создать новость
           </button>
         </div>
-      </Fragment>
+        <div className="todo-container">
+          {!isNews &&
+            news.map((item, i) => <NewsPost key={item + i} text={item} />)}
+        </div>
+      </div>
     );
   }
 }
