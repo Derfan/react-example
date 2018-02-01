@@ -1,71 +1,69 @@
 import React from 'react';
 import App from '../App';
-import NewsPost from '../NewsPost';
-import {shallow} from 'enzyme';
+import Auth from '../Auth';
+import Home from '../Home';
+import Private from '../Private';
+import {mount, shallow} from 'enzyme';
+import {MemoryRouter, Link, Route} from 'react-router-dom';
 
-describe('App component', () => {
-  const wrapper = shallow(<App />);
+describe('Компонент App:', () => {
+  describe('Редиректы:', () => {
+    it('Приложение должно делать редирект с /private на /auth если state.isAuthorized === false', () => {
+      const wrapper = mount(
+        <MemoryRouter initialEntries={['/private']}>
+          <App />
+        </MemoryRouter>
+      );
 
-  describe('test render', () => {
-    it('contain div with class App', () => {
-      expect(wrapper.find('div.App')).toHaveLength(1);
+      expect(wrapper.find(Private)).toHaveLength(0);
+      expect(wrapper.find(Auth)).toHaveLength(1);
     });
-    it('contain input', () => {
-      expect(wrapper.find('input')).toHaveLength(1);
+    it('Приложение должно делать редирект с рандомного url /randomadsfadf на / если state.isAuthorized === false', () => {
+      const wrapper = mount(
+        <MemoryRouter initialEntries={['/randomadsfadf']}>
+          <App />
+        </MemoryRouter>
+      );
+
+      expect(wrapper.find(Home)).toHaveLength(1);
     });
   });
+  describe('Методы класса:', () => {
+    describe('render:', () => {
+      describe('jsx:', () => {
+        describe('Содержит ссылку на:', () => {
+          const wrapper = mount(
+            <MemoryRouter>
+              <App />
+            </MemoryRouter>
+          );
 
-  describe('check presence of instance methods', () => {
-    const wrapper = shallow(<App />);
-    it('contain instance method handleChange', () => {
-      expect(wrapper.instance().handleChange).toBeDefined();
-    });
+          ['/private', '/auth', '/public', '/'].forEach(path => {
+            it(path, () => {
+              expect(
+                wrapper.findWhere(el => el.type() === Link && el.props().to === path)
+              ).toHaveLength(1);
+            });
+          });
+        });
+        const wrapper = shallow(<App />);
 
-    it('contain instance method handleNewPost', () => {
-      expect(wrapper.instance().handleNewPost).toBeDefined();
-    });
-  });
+        it('Если state.isAuthorized === false, то отсутствует Route к /private', () => {
+          wrapper.setState({isAuthorized: false});
+          wrapper.update();
+          expect(
+            wrapper.findWhere(el => el.type() === Route && el.props().path === '/private')
+          ).toHaveLength(0);
+        });
 
-  describe('check state content', () => {
-    const wrapper = shallow(<App />);
-    it('contain news array', () => {
-      expect(wrapper.state().news).toEqual([]);
-    });
-    it('contain newsInput with empty string', () => {
-      expect(wrapper.state().newsInput).toEqual('');
-    });
-  });
-
-  describe('check callbacks', () => {
-    it('save from input to state.newsInput', () => {
-      const wrapper = shallow(<App />);
-      wrapper.find('input').simulate('change', {target: {value: 10}});
-      wrapper.update();
-      expect(wrapper.state().newsInput).toEqual(10);
-    });
-    it('create new post from value state.newsInput via click on button', () => {
-      const wrapper = shallow(<App />);
-      wrapper.find('input').simulate('change', {target: {value: 10}});
-      wrapper.update();
-      wrapper.find('button').simulate('click');
-      expect(wrapper.state().newsInput).toEqual('');
-      expect(wrapper.state().news[0].text).toEqual(10);
-    });
-  });
-
-  describe('check Comments rendering', () => {
-    it('render NewsPost component on create new post', () => {
-      const wrapper = shallow(<App />);
-      wrapper.find('input').simulate('change', {target: {value: 10}});
-      wrapper.update();
-      wrapper.find('button').simulate('click');
-      wrapper.update();
-      const newsFromState = wrapper.state().news[0];
-      expect(
-        wrapper.contains(
-          <NewsPost key={newsFromState.text} text={newsFromState.text} />
-        )
-      ).toBeTruthy();
+        it('Если state.isAuthorized === true, то присутствует Route к /private', () => {
+          wrapper.setState({isAuthorized: true});
+          wrapper.update();
+          expect(
+            wrapper.findWhere(el => el.type() === Route && el.props().path === '/private')
+          ).toHaveLength(1);
+        });
+      });
     });
   });
 });
