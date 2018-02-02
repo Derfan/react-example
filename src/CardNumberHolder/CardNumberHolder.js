@@ -8,15 +8,20 @@ export default class CardNumberHolder extends Component {
   }
 
   handleChange = e => {
-    e.target.value = this.formated(e.target.value);
+    const { value } = e.target;
+
+    this.setState({ cardNumber: this.formated(value) });
   };
 
   render() {
+    const { cardNumber } = this.state;
+
     return (
       <input
         type="text"
         placeholder="0000 0000 0000 0000"
         onChange={this.handleChange}
+        value={cardNumber}
       />
     );
   }

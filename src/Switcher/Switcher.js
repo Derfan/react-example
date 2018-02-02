@@ -23,15 +23,15 @@ export default class Switcher extends Component {
       <div className="switcher">
         <nav>
           <ul className="component-list">
-            {this.title.map((el, i) => {
+            {this.title.map((element, index) => {
               return (
                 <li
-                  key={el + i}
+                  key={element + index}
                   className="component-list__name"
-                  data-id={i}
+                  data-id={index}
                   onClick={this.handlerClick}
                 >
-                  {el}
+                  {element}
                 </li>
               );
             })}
