@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import { isAuthorized, authorizeUser } from "./AuthorizeApi";
 
 export default class Auth extends Component {
@@ -10,20 +11,22 @@ export default class Auth extends Component {
     this.setState({ [name]: value });
   };
 
-  handleClick = () => {
+  handleSubmit = () => {
     const { email, password } = this.state;
+    const isValid = authorizeUser(email, password);
 
     this.setState({
-      isError: !authorizeUser(email, password),
-      isAuthorized: authorizeUser(email, password)
+      isError: !isValid,
+      isAuthorized: isValid
     });
   };
 
   render() {
-    const { isError } = this.state;
+    const { isError, isAuthorized } = this.state;
 
     return (
       <div>
+        {isAuthorized && <Redirect from="/auth" to="/" />}
         <div>
           <input
             onChange={this.handleChange}
@@ -37,7 +40,7 @@ export default class Auth extends Component {
           />
           {isError && <p className="error">Неверный пароль и/или почта.</p>}
         </div>
-        <button onClick={this.handleClick}>Submit</button>
+        <button onClick={this.handleSubmit}>Submit</button>
       </div>
     );
   }
