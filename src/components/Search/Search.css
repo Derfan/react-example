@@ -1,0 +1,14 @@
+.search-panel {
+  padding-bottom: 20px;
+}
+.search-result {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.search-result__item {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+}
