@@ -5,12 +5,25 @@ import { searchRequest } from "../../actions/search";
 import Card from "../Series/Card/Card.js";
 
 export class Search extends PureComponent {
+  state = { searchInput: "" };
+
   handleSearch = () => {
-    this.props.boundSearchRequest(this.searchInput.value);
-    this.searchInput.value = "";
+    const { searchInput } = this.state;
+
+    this.props.boundSearchRequest(searchInput);
+    this.setState({ searchInput: "" });
   };
+
+  handleChange = event => {
+    this.setState({
+      searchInput: event.target.value
+    });
+  };
+
   render() {
+    const { searchInput } = this.state;
     const { isFetching, result, error } = this.props.search;
+    const isResult = result.length > 0;
 
     if (error !== null) {
       console.error("search", error);
@@ -23,15 +36,16 @@ export class Search extends PureComponent {
           <input
             type="text"
             placeholder="Название сериала"
-            ref={input => (this.searchInput = input)}
+            onChange={this.handleChange}
+            value={searchInput}
           />
           <button onClick={this.handleSearch}>Найти</button>
         </div>
-        <div className="search-result">
+        <div className="t-search-result search-result">
           {isFetching && "Выполняется поиск..."}
-          {result.length > 0 &&
+          {isResult &&
             result.map(item => (
-              <div key={item.id} className="search-result__item">
+              <div key={item.id} className="t-preview search-result__item">
                 <Card item={item} />
               </div>
             ))}
@@ -44,10 +58,6 @@ export class Search extends PureComponent {
 const mapStateToProps = state => ({
   search: state.search
 });
-
-// const mapDispatchToProps = dispatch => ({
-//   boundSearchRequest: searchText => dispatch(searchRequest(searchText)),
-// });
 
 const mapDispatchToProps = {
   boundSearchRequest: searchRequest

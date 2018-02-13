@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react';
-import './Page.css';
+import React, { PureComponent } from "react";
+import "./Page.css";
 
 class Page extends PureComponent {
   render() {
@@ -14,7 +14,7 @@ class Page extends PureComponent {
         </div>
         <div className="page__content">
           {people.map((people, index) =>
-            this.renderPerson(people.person, index),
+            this.renderPerson(people.person, index)
           )}
         </div>
       </div>
@@ -24,14 +24,12 @@ class Page extends PureComponent {
   renderPerson = (person, key) => {
     const { name, image } = person;
     return (
-      <div key={key}>
+      <div className="t-person" key={key}>
         <p>{name}</p>
         {image && image.medium && <img src={image.medium} alt={name} />}
       </div>
     );
   };
 }
-
-// TODO add props
 
 export default Page;
